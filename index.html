@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<div class="container">
+			<div class="addSuppbox">
+				<div>
+					<input placeholder="company name" type="text" id="company" />
+				</div>
+
+				<div>
+					<input placeholder="contact name" type="text" id="contact" />
+				</div>
+				<div>
+					<input placeholder="contact title name" type="text" id="contactTitle" />
+				</div>
+
+				<div>
+					<button onclick="add()">Add Supplier</button>
+				</div>
+			</div>
+
+			<table>
+				<thead>
+					<tr>
+						<th>id</th>
+						<th>companyName</th>
+						<th>contactName</th>
+						<th>contactTitle</th>
+					</tr>
+				</thead>
+				<tbody id="tbody"></tbody>
+			</table>
+		</div>
+	</body>
+	<script src="index.js"></script>
+</html>
