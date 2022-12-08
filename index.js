@@ -26,17 +26,24 @@ function showList(element) {
 
 	let btnDelete = document.createElement('button');
 	btnDelete.innerText = 'Delete';
-	btnDelete.style.cursor = 'pointer';
 
-	btnDelete.addEventListener('click', () => itemDelete(element.id), UpdateSupplier(element.id));
+	let btnUpdate = document.createElement('button');
+	btnUpdate.innerText = 'Update';
 
-	console.log(element);
+	let divForBtn = document.createElement('div');
+	divForBtn.style.display = 'flex';
+
+	btnDelete.addEventListener('click', () => itemDelete(element.id));
+
 	tr.append(td);
 	tr.append(td1);
 	tr.append(td2);
 	tr.append(td3);
-	tr.append(btnDelete);
+	divForBtn.append(btnDelete);
+	divForBtn.append(btnUpdate);
+	tr.append(divForBtn);
 	tbody.append(tr);
+	btnUpdate.addEventListener('click', () => itemUpdate(element));
 }
 
 function add() {
@@ -46,7 +53,6 @@ function add() {
 		contactTitle: contactTitle.value,
 	};
 	axios.post(url, info).then((res) => {
-		console.log(res);
 		axios.get(url).then((response) => {
 			response.data.forEach((element) => {
 				showList(element);
@@ -55,20 +61,16 @@ function add() {
 	});
 }
 
-async function UpdateSupplier(id) {
-	await axios({
-		method: 'put',
-		url: `${url}/${id}`,
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify(newProduct),
-	});
+function itemUpdate(element) {
+	company.value = element.companyName;
+	contact.value = element.contactName;
+	contactTitle.value = element.contactTitle;
+
+	axios.put(`${url}/${element}`);
 }
 
 function firstGetItems() {
-	document.querySelector('tbody').innerHTML = '';
+	tbody.innerHTML = '';
 	fetch(url)
 		.then((res) => res.json())
 		.then((data) => {
