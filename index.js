@@ -52,18 +52,20 @@ function add() {
 		contactName: contact.value,
 		contactTitle: contactTitle.value,
 	};
-	axios.post(url, info).then((res) => {
-		axios
-			.get(url)
-			.then((response) => {
-				response.data.forEach((element) => {
-					showList(element);
-				});
-			})
-			.then(() => {
-				firstGetItems();
+	axios.post(url, info).then(() => {});
+	axios
+		.get(url)
+		.then((response) => {
+			response.data.forEach((element) => {
+				showList(element);
 			});
-	});
+		})
+		.then(() => {
+			firstGetItems();
+		});
+	company.value = ' ';
+	contact.value = ' ';
+	contactTitle.value = ' ';
 }
 
 function itemUpdate(element) {
@@ -71,18 +73,17 @@ function itemUpdate(element) {
 	contact.value = element.contactName;
 	contactTitle.value = element.contactTitle;
 
-	axios
-		.put(`${url}/${element}`, {
-			companyName: element.companyName,
-			contactName: element.contactName,
-			contactTitle: element.contactTitle,
-		})
-		.then((res) => {});
+	axios.put(`${url}/${element.id}`, {
+		companyName: company.value,
+		contactName: contact.value,
+		contactTitle: contactTitle.value,
+	});
+	console.log(element.id);
 }
 
-function firstGetItems() {
+async function firstGetItems() {
 	tbody.innerHTML = '';
-	fetch(url)
+	await fetch(url)
 		.then((res) => res.json())
 		.then((data) => {
 			data.forEach((element) => {
