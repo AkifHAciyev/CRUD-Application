@@ -53,11 +53,16 @@ function add() {
 		contactTitle: contactTitle.value,
 	};
 	axios.post(url, info).then((res) => {
-		axios.get(url).then((response) => {
-			response.data.forEach((element) => {
-				showList(element);
+		axios
+			.get(url)
+			.then((response) => {
+				response.data.forEach((element) => {
+					showList(element);
+				});
+			})
+			.then(() => {
+				firstGetItems();
 			});
-		});
 	});
 }
 
@@ -66,7 +71,13 @@ function itemUpdate(element) {
 	contact.value = element.contactName;
 	contactTitle.value = element.contactTitle;
 
-	axios.put(`${url}/${element}`);
+	axios
+		.put(`${url}/${element}`, {
+			companyName: element.companyName,
+			contactName: element.contactName,
+			contactTitle: element.contactTitle,
+		})
+		.then((res) => {});
 }
 
 function firstGetItems() {
@@ -81,7 +92,9 @@ function firstGetItems() {
 }
 
 function itemDelete(id) {
-	axios.delete(`${url}/${id}`);
+	axios.delete(`${url}/${id}`).then(() => {
+		firstGetItems();
+	});
 }
 
 firstGetItems();
