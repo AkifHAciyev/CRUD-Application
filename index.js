@@ -3,6 +3,8 @@ let contact = document.getElementById('contact');
 let contactTitle = document.getElementById('contactTitle');
 let tbody = document.getElementById('tbody');
 let url = 'https://northwind.vercel.app/api/suppliers';
+let isUpdate = false;
+let idUpdateBtn;
 
 let newProduct = {
 	companyName: company.value,
@@ -52,32 +54,43 @@ function add() {
 		contactName: contact.value,
 		contactTitle: contactTitle.value,
 	};
-	axios.post(url, info).then(() => {});
-	axios
-		.get(url)
-		.then((response) => {
-			response.data.forEach((element) => {
-				showList(element);
+	if (isUpdate) {
+		axios
+			.put(`${url}/${idUpdateBtn}`, {
+				companyName: company.value,
+				contactName: contact.value,
+				contactTitle: contactTitle.value,
+			})
+			.then(() => {
+				firstGetItems();
 			});
-		})
-		.then(() => {
-			firstGetItems();
-		});
+		isUpdate = false;
+	} else {
+		axios.post(url, info).then(() => {});
+		axios
+			.get(url)
+			.then((response) => {
+				response.data.forEach((element) => {
+					showList(element);
+				});
+			})
+			.then(() => {
+				firstGetItems();
+			});
+		isUpdate = false;
+	}
+	firstGetItems();
 	company.value = ' ';
 	contact.value = ' ';
 	contactTitle.value = ' ';
 }
 
 function itemUpdate(element) {
+	isUpdate = true;
+	idUpdateBtn = element.id;
 	company.value = element.companyName;
 	contact.value = element.contactName;
 	contactTitle.value = element.contactTitle;
-
-	axios.put(`${url}/${element.id}`, {
-		companyName: company.value,
-		contactName: contact.value,
-		contactTitle: contactTitle.value,
-	});
 	console.log(element.id);
 }
 
